@@ -14,3 +14,12 @@ for piece_filename = pieces_filenames
     pieces{end+1} = puzzlePiece(new_piece);
 end
 
+
+% solution = random piece
+% initialize each side of piece to null
+% for each null side in solution
+%   find 
+% iterate over all side of other pieces
+
+
+
