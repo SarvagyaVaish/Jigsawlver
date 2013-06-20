@@ -7,16 +7,16 @@ clc;clear;
 pieces = {};
 path = 'puzzles/sky/piece_';
 file_extension = '.PNG';
-f = figure;
 for i = 1:9
     filename = [path, num2str(i), file_extension];
     new_piece = im2double(rgb2gray(imread(filename)));
     pieces{end+1} = puzzlePiece(new_piece);
     
-    find_top_left(filename, 3, 3, i)
-%     pause(1); close all;
+    f = figure;
+    find_top_left(filename)
+    print(f, [i, '_with_corner.png'])
+    pause(1); close all;
 end
-saveas(f, 'top_left_corner.png')
 
 % Step 2: Find corners using Hough's Transform
 %   input: one puzzle piece
