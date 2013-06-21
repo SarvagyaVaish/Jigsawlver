@@ -2,12 +2,12 @@ classdef puzzlePiece < handle
 
    properties
       Image
-   end
-   properties(SetAccess = private)
-      Up
-      Down
-      Left
-      Right
+      Corners
+	  PositionInSolution
+      UpPosition
+      DownPosition
+      LeftPosition
+      RightPosition
    end
     
    methods

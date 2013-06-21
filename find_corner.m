@@ -1,4 +1,5 @@
-function find_top_left(filename, sbplt_x, sbplt_y, plt_index)
+function corner_location = find_corner(filename, corner_type)
+warning('off');
 
 % get piece
 original_piece = imread(filename);
@@ -9,22 +10,36 @@ piece = im2double(rgb2gray(original_piece));
 piece_binary = boolean(im2bw(piece, graythresh(piece)));
 piece_binary = imfill(~piece_binary, 'holes');
 
-% form wavelet - see matlab wavelets
+% form wavelet
 wavelet_size = 10;
-top_left_wavelet = boolean(ones(wavelet_size));
-top_left_wavelet(1:wavelet_size/2, :) = false;
-top_left_wavelet(:, 1:wavelet_size/2) = false;
+wavelet = boolean(ones(wavelet_size));
+switch (corner_type)
+    case 'top_left'
+        wavelet(1:wavelet_size/2, :) = false;
+        wavelet(:, 1:wavelet_size/2) = false;
+        image_corner = [1, 1];
+    case 'top_right'
+        wavelet(1:wavelet_size/2, :) = false;
+        wavelet(:, wavelet_size/2+1:end) = false;
+        image_corner = [cols, 1];
+    case 'bottom_left'
+        wavelet(wavelet_size/2+1:end, :) = false;
+        wavelet(:, 1:wavelet_size/2) = false;
+        image_corner = [1, rows];
+    case 'bottom_right'
+        wavelet(wavelet_size/2+1:end, :) = false;
+        wavelet(:, wavelet_size/2+1:end) = false;
+        image_corner = [cols, rows];
+end
 
 % find wavelet in piece
 score_map = ones(rows, cols)*power(wavelet_size, 2);
-
-warning('off');
 
 for x = 1:rows-wavelet_size
     for y = 1:cols-wavelet_size
         
         piece_section = piece_binary(x:x+wavelet_size-1, y:y+wavelet_size-1);
-        dist_mat = xor(piece_section, top_left_wavelet);
+        dist_mat = xor(piece_section, wavelet);
         
         error = sum(sum(dist_mat));
         score_map(x+wavelet_size/2, y+wavelet_size/2) = error;
@@ -34,7 +49,7 @@ for x = 1:rows-wavelet_size
         %         subplot(1, 3, 1);
         %         imshow(mat2gray(piece_section, [min(min(piece_section)), max(max(piece_section))]));
         %         subplot(1, 3, 2);
-        %         imshow(mat2gray(top_left_wavelet, [min(min(top_left_wavelet)), max(max(top_left_wavelet))]));
+        %         imshow(mat2gray(wavelet, [min(min(wavelet)), max(max(wavelet))]));
         %         subplot(1, 3, 3);
         %         imshow(mat2gray(dist_mat, [min(min(dist_mat)), max(max(dist_mat))]));
         %         pause(0.0001);
@@ -68,7 +83,6 @@ end
 %possible_corners
 
 % select corner closest to image corner
-image_corner = [0, 0];
 min_dist = pdist([possible_corners(1, :); image_corner]);
 corner_index = 1;
 for corner = 2:size(possible_corners, 1)
@@ -79,10 +93,9 @@ for corner = 2:size(possible_corners, 1)
     end
 end
 
-corner = possible_corners(corner_index, :);
+corner_location = possible_corners(corner_index, :);
 
-subplot(sbplt_x, sbplt_y, plt_index);
-imshow(original_piece); hold on;
-plot(corner(1), corner(2), 'or', 'MarkerSize', 10);
-
+%imshow(original_piece); hold on;
+%plot(corner_location(1), corner_location(2), 'or', 'MarkerSize', 10);
+%pause(1)
 end
