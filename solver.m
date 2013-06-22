@@ -15,16 +15,15 @@ pieces = {};
 path = 'puzzles/sky/piece_';
 file_extension = '.PNG';
 for i = 1:9
+	% obtain the image of the piece
 	filename = [path, num2str(i), file_extension];
-	new_piece = im2double(rgb2gray(imread(filename)));
-	pieces{end+1} = puzzlePiece(new_piece);
+	new_piece_image = im2double(rgb2gray(imread(filename)));
 	
-	tl = find_corner(filename, 'top_left');
-	tr = find_corner(filename, 'top_right');
-	bl = find_corner(filename, 'bottom_left');
-	br = find_corner(filename, 'bottom_right');
+	%new_piece_image = bufferImage(new_piece_image);	
+	new_piece = puzzlePiece(new_piece_image);
+	new_piece = find_corner(new_piece);
 	
-	pieces{end}.Corners = [tl; tr; bl; br];
+	pieces{end+1} = new_piece;
 	
 	%     subplot(3, 3, i);
 	%     imshow(new_piece); hold on;
