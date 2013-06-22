@@ -24,9 +24,7 @@ for i = 1:9
 	bl = find_corner(filename, 'bottom_left');
 	br = find_corner(filename, 'bottom_right');
 	
-	pieces{end}.Corners = struct( ...
-		'TopLeftCorner', tl, 'TopRightCorner', tr, ...
-		'BottomLeftCorner', bl, 'BottomRightCorner', br);
+	pieces{end}.Corners = [tl tr bl br];
 	
 	%     subplot(3, 3, i);
 	%     imshow(new_piece); hold on;
