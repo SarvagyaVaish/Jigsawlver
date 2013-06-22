@@ -74,10 +74,11 @@ while length(unmatched_edges)>0
 		best_unmatched_edge_index = inf;
 		best_unmatched_edge_score = inf;
 		position_of_best_unmatched_edge = 0;
+        rotation_of_best_unmatched_edge = 0;
 		
 		for unmatched_edge_index = 1:size(unmatched_edges, 1)
 			% Compare edge shapes
-			[shape_match_score, match_position] = compare_edge_shape( ...
+			[shape_match_score, match_position, match_rotation] = compare_edge_shape( ...
 				edge_to_be_checked, unmatched_edges(unmatched_edge_index, :));
 			
 			if shape_match_score < shape_match_score_threshold
@@ -113,10 +114,8 @@ while length(unmatched_edges)>0
 					position(1,2) = position(1,2) - 1;
 			end
 			pieces{unmatched_edges(best_unmatched_edge_index,1)}.PositionInSolution = position;
-			
-			num_rotations = unmatched_edges(best_unmatched_edge_index,1) - mod((edge_to_be_checked(1,2) + 2),4);
-			pieces{unmatched_edges(best_unmatched_edge_index,1)}.Image = imrotate(pieces{unmatched_edges(best_unmatched_edge_index,1)}.Image,90*num_rotations);
-			
+			pieces{unmatched_edges(best_unmatched_edge_index,1)} = rotatePiece(pieces{unmatched_edges(best_unmatched_edge_index,1)}, rotation_of_best_unmatched_edge);
+            
 			solution_matrix(position(1,1),position(1,2)) = unmatched_edges(best_unmatched_edge_index,1);
 			if(solution_matrix(position(1,1)+1,position(1,2)) == 0)
 				edges_in_queue(end+1,:) = [unmatched_edges(best_unmatched_edge_index,1),3]
