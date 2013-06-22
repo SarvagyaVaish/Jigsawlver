@@ -10,7 +10,7 @@ piece_image_binary = boolean(im2bw(piece_image, graythresh(piece_image)));
 piece_image_binary = imfill(~piece_image_binary, 'holes');
 
 corners = [];
-for corner_type_cell = {'top_left', 'top_right', 'bottom_left', 'bottom_right'}
+for corner_type_cell = {'top_left', 'top_right', 'bottom_right', 'bottom_left'}
 	
 	corner_type = corner_type_cell{1};
 	% form wavelet
