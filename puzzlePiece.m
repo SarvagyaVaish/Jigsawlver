@@ -2,6 +2,8 @@ classdef puzzlePiece < handle
 
    properties
       Image
+	  ImageRGB
+	  ImageBW
       Corners
 	  PositionInSolution
       UpPosition

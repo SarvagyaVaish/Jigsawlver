@@ -20,30 +20,25 @@ for i = 1:9
 	
 	% read original image
 	rgb_image = imread(filename);
-	rgb_image(rgb_image == 0) = 1;
-	
-	% add buffer to deal with rotations and such
-	rgb_image = bufferImage(rgb_image);
-	rgb_image = im2double(rgb_image);
-	
 	% convert to gray scale
 	gray_image_temp = im2double(rgb2gray(rgb_image));
+	% secure all the pure
+	gray_image_temp(gray_image_temp == 0) = 0.000001;
+	buffered_gray_image = bufferImage(gray_image_temp);
+	buffered_gray_image(buffered_gray_image == 0) = 1;
 	
-	% convert added margin into pure white
-	gray_image_temp(gray_image_temp == 0) = 1;
-	
-	% create binary image
 	bw_image = boolean(im2bw(gray_image_temp, graythresh(gray_image_temp)));
 	bw_image = imfill(~bw_image, 'holes');
-	
 	gray_image = zeros(size(gray_image_temp, 1), size(gray_image_temp, 2));
 	gray_image(bw_image) = gray_image_temp(bw_image);
 	
+	% add buffer to deal with rotations and such
+	buffered_gray_image = bufferImage(gray_image);
 	
 	% store all necessary images in puzzlePiece object
-	new_piece = puzzlePiece(gray_image);
+	new_piece = puzzlePiece(buffered_gray_image);
 	new_piece.ImageRGB = rgb_image;
-	new_piece.ImageBW = bw_image;
+	new_piece.ImageBW = binary_image;
 	
 	% find corners
 	new_piece = find_corner(new_piece);

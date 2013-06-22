@@ -5,9 +5,8 @@ warning('off');
 piece_image = piece.Image;
 [rows, cols] = size(piece_image);
 
-% convert to binary
-piece_image_binary = boolean(im2bw(piece_image, graythresh(piece_image)));
-piece_image_binary = imfill(~piece_image_binary, 'holes');
+% get binary
+piece_image_binary = piece.ImageBW;
 
 corners = [];
 for corner_type_cell = {'top_left', 'top_right', 'bottom_right', 'bottom_left'}
