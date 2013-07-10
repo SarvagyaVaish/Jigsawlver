@@ -11,6 +11,7 @@ for i = 1:4
 	corners(i, :) = rotatePoint(corners(i, :), size(piece_to_rotate.Image)/2, angle);
 end
 
+rotated_piece.PositionInSolution = piece_to_rotate.PositionInSolution;
 rotated_piece.Corners = corners;
 
 end

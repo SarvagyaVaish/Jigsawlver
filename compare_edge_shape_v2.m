@@ -16,8 +16,8 @@ for ang_1 = 0:20:400
 		pair2a = piece2.Corners(piece2_corners_ind(1), :);
 		pair2b = piece2.Corners(piece2_corners_ind(2), :);
 		
-		m1 = twoPointSlopeRC(pair1a, pair1b);
-		m2 = twoPointSlopeRC(pair2a, pair2b);
+		m1 = twoPointSlope(pair1a, pair1b);
+		m2 = twoPointSlope(pair2a, pair2b);
 		
 		match_rotation = atand(abs((m1-m2)/(1+m1*m2)));
 		
@@ -44,7 +44,7 @@ for ang_1 = 0:20:400
 		
 		pair3a = piece3.Corners(piece3_corners_ind(1), :);
 		pair3b = piece3.Corners(piece3_corners_ind(2), :);
-		m3 = twoPointSlopeRC(pair3a, pair3b);
+		m3 = twoPointSlope(pair3a, pair3b);
 		
 		
 		figure;

@@ -7,6 +7,6 @@ function rotated_point = rotatePoint(point_to_rotate, center_point, angle_in_deg
 angle_in_deg = -angle_in_deg;
 rot = [cosd(angle_in_deg), -sind(angle_in_deg); sind(angle_in_deg), cosd(angle_in_deg)];
 rotated_point = rot*(point_to_rotate'-center_point') + center_point';
-rotated_point = rotated_point';
+rotated_point = round(rotated_point');
 
 end
