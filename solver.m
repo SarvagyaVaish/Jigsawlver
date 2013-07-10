@@ -48,14 +48,8 @@ for i = 1:9
 	% find corners
 	new_piece = find_corner(new_piece);
 	
+	% add piece to pieces cell array
 	pieces{end+1} = new_piece;
-	
-	%     subplot(3, 3, i);
-	%     imshow(new_piece); hold on;
-	%     plot(top_left_corner(1), top_left_corner(2), 'or', 'MarkerSize', 10);
-	%     plot(top_right_corner(1), top_right_corner(2), 'or', 'MarkerSize', 10);
-	%     plot(bottom_left_corner(1), bottom_left_corner(2), 'or', 'MarkerSize', 10);
-	%     plot(bottom_right_corner(1), bottom_right_corner(2), 'or', 'MarkerSize', 10);
 	
 end
 

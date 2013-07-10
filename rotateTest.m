@@ -1,25 +1,22 @@
-clc;
-ang = 15;
+clc;clear;
+load('pieces.mat');
 
-p = rotatePiece(pieces{1}, ang);
-subplot(1, 3, 1)
-pieces{1}.show_image
-subplot(1, 3, 2)
-p.show_image
+p_a = pieces{1};
 
-subplot(1, 3, 3)
+edge_a = 2;
+corners_a_ind = edge_a:edge_a+1;
+corners_a_ind(corners_a_ind == 5) = 1;
+
+corners_a = p_a.Corners(corners_a_ind, :)
+m_a = twoPointSlope(corners_a(1, :), corners_a(2, :))
+(atand(m_a))
+
+subplot(1, 2, 1);
 hold on;
-for i = 2:2
-	point = pieces{1}.Corners(i, :);
-	'point'; point
-	plot(point(1), point(2), 'ok');
-	rp = rotatePoint(point, center, ang);
-	'rp'; rp
-	plot(rp(1), rp(2), 'xr');
-end
-center = size(pieces{1}.Image)./2;
+imshow(p_a.Image)
+plot(corners_a(1, 1), corners_a(1, 2), 'or', 'MarkerSize', 10);
+plot(corners_a(2, 1), corners_a(2, 2), 'or', 'MarkerSize', 10);
 
-%plot([0, 0, 20, 20], [0, 20, 0, 20], '.r');
-
-plot(center(1), center(2), '.k');
-
+subplot(1, 2, 2);
+hold on;
+p_a.show_image;
