@@ -1,6 +1,6 @@
 clc;
 %close all;
-sm = solution_matrix(16:19, 17:19);
+sm = solution_matrix(17:20, 18:20);
 sm_size = size(sm);
 global pieces
 

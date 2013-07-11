@@ -1,7 +1,7 @@
 function [color_match_score] = compare_edge_color(edge_1, edge_2, rotation)
 % PARAMS
 comparison_depth = 14;
-num_points = 15;
+num_points = 50;
 
 global pieces;
 

@@ -1,8 +1,8 @@
 clc;clear;
 
 % % PARAMS
-% shape_match_score_threshold = 600;
-% color_match_score_threshold = .4;
+% shape_match_score_threshold = inf;
+% color_match_score_threshold = inf;
 % shape_match_threshold_backoff = 80;
 % color_match_threshold_backoff = .2;
 % 
@@ -89,6 +89,8 @@ clc;clear;
 
 
 load('image_aquisitio_workspace.mat');
+shape_match_score_threshold = inf;
+color_match_score_threshold = inf;
 
 while length(unmatched_edges)>0
 	'hey there'
@@ -117,7 +119,7 @@ while length(unmatched_edges)>0
 				
 				if color_match_score < color_match_score_threshold
 					% calculate overall score
-					unmatched_edge_score = color_match_score + shape_match_score;
+					unmatched_edge_score = 180*color_match_score + shape_match_score;
 					if unmatched_edge_score < best_unmatched_edge_score
 						best_unmatched_edge_score = unmatched_edge_score;
 						best_unmatched_edge_index = unmatched_edge_index;
@@ -152,7 +154,7 @@ while length(unmatched_edges)>0
 					edges_in_queue(end+1,:) = [unmatched_edges(best_unmatched_edge_index,1), 3];
 				end
 			else
-				ind_to_delete = find(edges_in_queue(:, 1) == unmatched_edges(best_unmatched_edge_index,1) ...
+				ind_to_delete = find(edges_in_queue(:, 1) == solution_matrix(position(1,1)+1,position(1,2)) ...
 					& edges_in_queue(:, 2) == 1);
 				edges_in_queue(ind_to_delete, :) = [];
 			end
@@ -163,8 +165,8 @@ while length(unmatched_edges)>0
 					edges_in_queue(end+1,:) = [unmatched_edges(best_unmatched_edge_index,1),1];
 				end
 			else
-				ind_to_delete = find(edges_in_queue(:, 1) == unmatched_edges(best_unmatched_edge_index,1) ...
-					& edges_in_queue(:, 2) == 3)
+				ind_to_delete = find(edges_in_queue(:, 1) == solution_matrix(position(1,1)-1,position(1,2)) ...
+					& edges_in_queue(:, 2) == 3);
 				edges_in_queue(ind_to_delete, :) = [];
 			end
 			
@@ -174,8 +176,8 @@ while length(unmatched_edges)>0
 					edges_in_queue(end+1,:) = [unmatched_edges(best_unmatched_edge_index,1),2];
 				end
 			else
-				ind_to_delete = find(edges_in_queue(:, 1) == unmatched_edges(best_unmatched_edge_index,1) ...
-					& edges_in_queue(:, 2) == 4)
+				ind_to_delete = find(edges_in_queue(:, 1) == solution_matrix(position(1,1),position(1,2)+1) ...
+					& edges_in_queue(:, 2) == 4);
 				edges_in_queue(ind_to_delete, :) = [];
 			end
 			
@@ -185,8 +187,8 @@ while length(unmatched_edges)>0
 					edges_in_queue(end+1,:) = [unmatched_edges(best_unmatched_edge_index,1),4];
 				end
 			else
-				ind_to_delete = find(edges_in_queue(:, 1) == unmatched_edges(best_unmatched_edge_index,1) ...
-					& edges_in_queue(:, 2) == 2)
+				ind_to_delete = find(edges_in_queue(:, 1) == solution_matrix(position(1,1),position(1,2)-1) ...
+					& edges_in_queue(:, 2) == 2);
 				edges_in_queue(ind_to_delete, :) = [];
 			end
 			
