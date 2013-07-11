@@ -61,7 +61,7 @@ comparisonSpace(insertionPoint(1,2):insertionPoint(1,2) + size2(1,2) - 1, insert
 
 
 
-mask = ones(fit_mask_width, max(dist1,dist2))';
+mask = ones(fit_mask_width, round(max(dist1,dist2)))';
 mask = boolean(bufferImage(mask));
 
 mask_piece = puzzlePiece(mask);

@@ -54,7 +54,7 @@ global pieces;
 % end
 
 load('pieces.mat')
-'done with finding pieces'
+'done with digitizing pieces'
 
 % Step 3: Graph search
 %   input: all puzzle pieces
@@ -69,13 +69,17 @@ solution_matrix(floor(length(solution_matrix)/2), floor(length(solution_matrix)/
 % adding all edges of the first piece to the bfs search queue
 edges_in_queue = [];
 for edge_number = 1:4
-	edges_in_queue(end+1, :) = [1, edge_number];
+	if is_edge_straight([1, edge_number])
+		edges_in_queue(end+1, :) = [1, edge_number];
+	end
 end
 
 unmatched_edges = [];
 for piece_number = 2:length(pieces)
 	for edge_number = 1:4
-		unmatched_edges(end+1, :) = [piece_number, edge_number];
+		if is_edge_straight([piece_number, edge_number])
+			unmatched_edges(end+1, :) = [piece_number, edge_number];
+		end
 	end
 end
 
@@ -107,7 +111,7 @@ while length(unmatched_edges)>0
 			if shape_match_score < shape_match_score_threshold
 				% Compare edge colors
 				[color_match_score] = compare_edge_color( ...
-					edge_to_be_checked, unmatched_edges(unmatched_edge_index, :));
+					edge_to_be_checked, unmatched_edges(unmatched_edge_index, :), match_rotation);
 				
 				if color_match_score < color_match_score_threshold
 					% calculate overall score
@@ -141,7 +145,10 @@ while length(unmatched_edges)>0
 			
 			solution_matrix(position(1,1),position(1,2)) = unmatched_edges(best_unmatched_edge_index,1);
 			if(solution_matrix(position(1,1)+1,position(1,2)) == 0)
-				edges_in_queue(end+1,:) = [unmatched_edges(best_unmatched_edge_index,1),3];
+				ind = find(unmatched_edges(:, 1) == unmatched_edges(best_unmatched_edge_index,1) & unmatched_edges(:, 2) == 3);
+				if length(ind) ~= 0
+					edges_in_queue(end+1,:) = [unmatched_edges(best_unmatched_edge_index,1), 3];
+				end
 			else
 				ind_to_delete = find(edges_in_queue(:, 1) == unmatched_edges(best_unmatched_edge_index,1) ...
 					& edges_in_queue(:, 2) == 1);
@@ -149,7 +156,10 @@ while length(unmatched_edges)>0
 			end
 			
 			if(solution_matrix(position(1,1)-1,position(1,2)) == 0)
-				edges_in_queue(end+1,:) = [unmatched_edges(best_unmatched_edge_index,1),1]
+				ind = find(unmatched_edges(:, 1) == unmatched_edges(best_unmatched_edge_index,1) & unmatched_edges(:, 2) == 1);
+				if length(ind) ~= 0
+					edges_in_queue(end+1,:) = [unmatched_edges(best_unmatched_edge_index,1),1];
+				end
 			else
 				ind_to_delete = find(edges_in_queue(:, 1) == unmatched_edges(best_unmatched_edge_index,1) ...
 					& edges_in_queue(:, 2) == 3)
@@ -157,7 +167,10 @@ while length(unmatched_edges)>0
 			end
 			
 			if(solution_matrix(position(1,1),position(1,2)+1) == 0)
-				edges_in_queue(end+1,:) = [unmatched_edges(best_unmatched_edge_index,1),2]
+				ind = find(unmatched_edges(:, 1) == unmatched_edges(best_unmatched_edge_index,1) & unmatched_edges(:, 2) == 2);
+				if length(ind) ~= 0
+					edges_in_queue(end+1,:) = [unmatched_edges(best_unmatched_edge_index,1),2];
+				end
 			else
 				ind_to_delete = find(edges_in_queue(:, 1) == unmatched_edges(best_unmatched_edge_index,1) ...
 					& edges_in_queue(:, 2) == 4)
@@ -165,7 +178,10 @@ while length(unmatched_edges)>0
 			end
 			
 			if(solution_matrix(position(1,1),position(1,2)-1) == 0)
-				edges_in_queue(end+1,:) = [unmatched_edges(best_unmatched_edge_index,1),4]
+				ind = find(unmatched_edges(:, 1) == unmatched_edges(best_unmatched_edge_index,1) & unmatched_edges(:, 2) == 4);
+				if length(ind) ~= 0
+					edges_in_queue(end+1,:) = [unmatched_edges(best_unmatched_edge_index,1),4];
+				end
 			else
 				ind_to_delete = find(edges_in_queue(:, 1) == unmatched_edges(best_unmatched_edge_index,1) ...
 					& edges_in_queue(:, 2) == 2)
