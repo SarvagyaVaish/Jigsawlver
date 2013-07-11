@@ -28,23 +28,23 @@ insertionPoint = piece1Corner - pair2b;
 comparisonSpace(insertionPoint(1,2):insertionPoint(1,2) + size2(1,2) - 1, insertionPoint(1,1):insertionPoint(1, 1) + size2(1,1) - 1) = ...
     comparisonSpace(insertionPoint(1,2):insertionPoint(1,2) + size2(1,2) - 1, insertionPoint(1,1):insertionPoint(1, 1) + size2(1,1) - 1) + piece2.Image;
 
-close all;
-figure;
-imagesc(comparisonSpace);
-hold on;
+% close all;
+% figure;
+% imagesc(comparisonSpace);
+% hold on;
 
 pairA = round(((pair1a + [corr_r, corr_c]) + (pair2a + insertionPoint))/2);
 pairB = ((pair1b + [corr_r, corr_c]) + (pair2b + insertionPoint))/2;
 pathVector = pairB - pairA;
 
-test = (pair1a + [corr_r, corr_c]);
-plot(test(1, 1), test(1, 2), 'or', 'MarkerSize', 10);
-test = (pair2a + insertionPoint);
-plot(test(1, 1), test(1, 2), 'or', 'MarkerSize', 10);
-test = (pair1b + [corr_r, corr_c]);
-plot(test(1, 1), test(1, 2), 'or', 'MarkerSize', 10);
-test = (pair2b + insertionPoint);
-plot(test(1, 1), test(1, 2), 'or', 'MarkerSize', 10);
+% test = (pair1a + [corr_r, corr_c]);
+% plot(test(1, 1), test(1, 2), 'or', 'MarkerSize', 10);
+% test = (pair2a + insertionPoint);
+% plot(test(1, 1), test(1, 2), 'or', 'MarkerSize', 10);
+% test = (pair1b + [corr_r, corr_c]);
+% plot(test(1, 1), test(1, 2), 'or', 'MarkerSize', 10);
+% test = (pair2b + insertionPoint);
+% plot(test(1, 1), test(1, 2), 'or', 'MarkerSize', 10);
 
 
 
@@ -60,8 +60,8 @@ for i=0:num_points
    aVal = comparisonSpace(a(1,1), a(1,2));
    bVal = comparisonSpace(b(1,1), b(1,2));
    color_match_score = color_match_score + (aVal - bVal)^2;
-   plot(a(1, 1), a(1, 2), 'ob', 'MarkerSize', 10);
-   plot(b(1, 1), b(1, 2), 'ob', 'MarkerSize', 10);
+%    plot(a(1, 1), a(1, 2), 'ob', 'MarkerSize', 10);
+%    plot(b(1, 1), b(1, 2), 'ob', 'MarkerSize', 10);
 end
 
 end
