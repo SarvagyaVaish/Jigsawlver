@@ -106,7 +106,7 @@ while length(unmatched_edges)>0
 			if shape_match_score < shape_match_score_threshold
 				% Compare edge colors
 				[color_match_score] = compare_edge_color( ...
-					edge_to_be_checked, unmatched_edges(unmatched_edge_index, :));
+					edge_to_be_checked, unmatched_edges(unmatched_edge_index, :), match_rotation);
 				
 				if color_match_score < color_match_score_threshold
 					% calculate overall score
