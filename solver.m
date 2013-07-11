@@ -52,6 +52,7 @@ clc;clear;
 % % 	pieces{end+1} = new_piece;
 % % 	
 % % end
+% % save('pieces.mat', 'pieces')
 % 
 % load('pieces.mat')
 % 'done with digitizing pieces'
@@ -86,7 +87,8 @@ clc;clear;
 % % list of edges which we would iterate over
 % % after lowering the threshold
 % edges_with_no_match = [];
-
+% 
+% save('image_aquisitio_workspace.mat')
 
 load('image_aquisitio_workspace.mat');
 shape_match_score_threshold = inf;

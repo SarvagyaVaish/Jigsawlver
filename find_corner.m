@@ -59,7 +59,7 @@ for corner_type_cell = {'top_left', 'top_right', 'bottom_right', 'bottom_left'}
 	end
 	
 	% find local minimum errors
-	%imagesc(score_map);
+	imagesc(score_map);
 	
 	% find local areas of interest
 	top_percent = 0.10;
@@ -78,7 +78,7 @@ for corner_type_cell = {'top_left', 'top_right', 'bottom_right', 'bottom_left'}
 		[a, corner_index] = min(score_map(indices));
 		corner_index = indices(corner_index);
 		corner_col = mod(corner_index, rows);
-		corner_row = double(int64(corner_index./rows)) + 1;
+		corner_row = double(int64(corner_index./rows));
 		possible_corners(end+1, :) = [corner_row, corner_col];
 	end
 	
