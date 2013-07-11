@@ -8,7 +8,7 @@ global pieces;
 piece = pieces{edge(1, 1)};
 corner1 = piece.Corners(edge(1, 2), :);
 corner2 = piece.Corners(mod(edge(1, 2), 4) + 1, :);
-edge_length = sqrt(sum((corner1 - corner2) .^ 2));
+edge_length = round(sqrt(sum((corner1 - corner2) .^ 2)));
 piece_size = size(piece.ImageBW);
 
 pair = corner1 - corner2;

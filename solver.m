@@ -1,92 +1,94 @@
 clc;clear;
 
-% PARAMS
-shape_match_score_threshold = 600;
-color_match_score_threshold = .4;
-shape_match_threshold_backoff = 80;
-color_match_threshold_backoff = .2;
-
-% Step 1: Blob detection
-%   input: one giant image 3D
-%   output: list of grayscale puzzle pieces
-
-global pieces;
-% pieces = {};
-% path = 'puzzles/sky/piece_';
-% file_extension = '.PNG';
-% for i = 1:9
-% 	% obtain the image of the piece
-% 	filename = [path, num2str(i), file_extension];
-% 	
-% 	% read original image
-% 	rgb_image = imread(filename);
-% 	rgb_image(rgb_image == 0) = 1;
-% 	
-% 	% add buffer to deal with rotations and such
-% 	rgb_image = bufferImage(rgb_image);
-% 	rgb_image = im2double(rgb_image);
-% 	
-% 	% convert to gray scale
-% 	gray_image_temp = im2double(rgb2gray(rgb_image));
-% 	
-% 	% convert added margin into pure white
-% 	gray_image_temp(gray_image_temp == 0) = 1;
-% 	
-% 	% create binary image
-% 	bw_image = boolean(im2bw(gray_image_temp, graythresh(gray_image_temp)));
-% 	bw_image = imfill(~bw_image, 'holes');
-% 	
-% 	gray_image = zeros(size(gray_image_temp, 1), size(gray_image_temp, 2));
-% 	gray_image(bw_image) = gray_image_temp(bw_image);
-% 	
-% 	
-% 	% store all necessary images in puzzlePiece object
-% 	new_piece = puzzlePiece(gray_image);
-% 	new_piece.ImageRGB = rgb_image;
-% 	new_piece.ImageBW = bw_image;
-% 	
-% 	% find corners
-% 	new_piece = find_corner(new_piece);
-% 	
-% 	% add piece to pieces cell array
-% 	pieces{end+1} = new_piece;
-% 	
+% % PARAMS
+% shape_match_score_threshold = 600;
+% color_match_score_threshold = .4;
+% shape_match_threshold_backoff = 80;
+% color_match_threshold_backoff = .2;
+% 
+% % Step 1: Blob detection
+% %   input: one giant image 3D
+% %   output: list of grayscale puzzle pieces
+% 
+% global pieces;
+% % pieces = {};
+% % path = 'puzzles/sky/piece_';
+% % file_extension = '.PNG';
+% % for i = 1:9
+% % 	% obtain the image of the piece
+% % 	filename = [path, num2str(i), file_extension];
+% % 	
+% % 	% read original image
+% % 	rgb_image = imread(filename);
+% % 	rgb_image(rgb_image == 0) = 1;
+% % 	
+% % 	% add buffer to deal with rotations and such
+% % 	rgb_image = bufferImage(rgb_image);
+% % 	rgb_image = im2double(rgb_image);
+% % 	
+% % 	% convert to gray scale
+% % 	gray_image_temp = im2double(rgb2gray(rgb_image));
+% % 	
+% % 	% convert added margin into pure white
+% % 	gray_image_temp(gray_image_temp == 0) = 1;
+% % 	
+% % 	% create binary image
+% % 	bw_image = boolean(im2bw(gray_image_temp, graythresh(gray_image_temp)));
+% % 	bw_image = imfill(~bw_image, 'holes');
+% % 	
+% % 	gray_image = zeros(size(gray_image_temp, 1), size(gray_image_temp, 2));
+% % 	gray_image(bw_image) = gray_image_temp(bw_image);
+% % 	
+% % 	
+% % 	% store all necessary images in puzzlePiece object
+% % 	new_piece = puzzlePiece(gray_image);
+% % 	new_piece.ImageRGB = rgb_image;
+% % 	new_piece.ImageBW = bw_image;
+% % 	
+% % 	% find corners
+% % 	new_piece = find_corner(new_piece);
+% % 	
+% % 	% add piece to pieces cell array
+% % 	pieces{end+1} = new_piece;
+% % 	
+% % end
+% 
+% load('pieces.mat')
+% 'done with digitizing pieces'
+% 
+% % Step 3: Graph search
+% %   input: all puzzle pieces
+% %   output: the solution
+% 
+% 
+% % relative position matrix
+% solution_matrix = zeros(4*length(pieces));
+% pieces{1}.PositionInSolution = [floor(length(solution_matrix)/2), floor(length(solution_matrix)/2)];
+% solution_matrix(floor(length(solution_matrix)/2), floor(length(solution_matrix)/2)) = 1;
+% 
+% % adding all edges of the first piece to the bfs search queue
+% edges_in_queue = [];
+% for edge_number = 1:4
+% 	if ~is_edge_straight([1, edge_number])
+% 		edges_in_queue(end+1, :) = [1, edge_number];
+% 	end
 % end
+% 
+% unmatched_edges = [];
+% for piece_number = 2:length(pieces)
+% 	for edge_number = 1:4
+% 		if ~is_edge_straight([piece_number, edge_number])
+% 			unmatched_edges(end+1, :) = [piece_number, edge_number];
+% 		end
+% 	end
+% end
+% 
+% % list of edges which we would iterate over
+% % after lowering the threshold
+% edges_with_no_match = [];
 
-load('pieces.mat')
-'done with digitizing pieces'
 
-% Step 3: Graph search
-%   input: all puzzle pieces
-%   output: the solution
-
-
-% relative position matrix
-solution_matrix = zeros(4*length(pieces));
-pieces{1}.PositionInSolution = [floor(length(solution_matrix)/2), floor(length(solution_matrix)/2)];
-solution_matrix(floor(length(solution_matrix)/2), floor(length(solution_matrix)/2)) = 1;
-
-% adding all edges of the first piece to the bfs search queue
-edges_in_queue = [];
-for edge_number = 1:4
-	if is_edge_straight([1, edge_number])
-		edges_in_queue(end+1, :) = [1, edge_number];
-	end
-end
-
-unmatched_edges = [];
-for piece_number = 2:length(pieces)
-	for edge_number = 1:4
-		if is_edge_straight([piece_number, edge_number])
-			unmatched_edges(end+1, :) = [piece_number, edge_number];
-		end
-	end
-end
-
-% list of edges which we would iterate over
-% after lowering the threshold
-edges_with_no_match = [];
-
+load('image_aquisitio_workspace.mat');
 
 while length(unmatched_edges)>0
 	'hey there'
