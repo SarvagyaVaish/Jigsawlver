@@ -59,7 +59,7 @@ for corner_type_cell = {'top_left', 'top_right', 'bottom_right', 'bottom_left'}
 	end
 	
 	% find local minimum errors
-	imagesc(score_map);
+	% imagesc(score_map);
 	
 	% find local areas of interest
 	top_percent = 0.10;
