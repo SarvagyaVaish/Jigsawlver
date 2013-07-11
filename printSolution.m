@@ -1,5 +1,5 @@
-clc;
-%close all;
+function printSolution(solution_matrix)
+
 sm = solution_matrix;
 cols = find(sum(sm, 1) == 0);
 sm(:, cols) = [];
@@ -9,7 +9,6 @@ sm(rows, :) = [];
 sm_size = size(sm);
 global pieces
 
-f = figure
 for i = 1:sm_size(1, 1)
 	for j = 1:sm_size(1, 2)
 		[i, j, sm(i, j)]
@@ -19,4 +18,6 @@ for i = 1:sm_size(1, 1)
 			imshow(pieces{sm(i, j)}.ImageRGB)
 		end
 	end
+end
+
 end
