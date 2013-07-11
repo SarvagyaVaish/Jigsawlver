@@ -2,9 +2,9 @@ clc;clear;
 
 % PARAMS
 shape_match_score_threshold = 600;
-color_match_score_threshold = 1;
-shape_match_threshold_backoff = 1;
-color_match_threshold_backoff = 1;
+color_match_score_threshold = .4;
+shape_match_threshold_backoff = 80;
+color_match_threshold_backoff = .2;
 
 % Step 1: Blob detection
 %   input: one giant image 3D
