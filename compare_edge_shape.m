@@ -26,7 +26,6 @@ if pair2(1,2)<0
 end
 
 
-
 match_rotation = angle1 - angle2;
 piece2 = rotatePiece(piece2, match_rotation);
 
@@ -41,8 +40,6 @@ if abs(dist1-dist2)>(edge_length_threshold*max(dist1,dist2))
 	match_position = 0;
 	return;
 end
-
-
 
 
 size1 = size(piece1.ImageBW);
@@ -61,17 +58,6 @@ piece1Corner = [corr_r, corr_c] + pair1b;
 insertionPoint = piece1Corner - pair2a;
 comparisonSpace(insertionPoint(1,2):insertionPoint(1,2) + size2(1,2) - 1, insertionPoint(1,1):insertionPoint(1, 1) + size2(1,1) - 1) = ...
 	xor(comparisonSpace(insertionPoint(1,2):insertionPoint(1,2) + size2(1,2) - 1, insertionPoint(1,1):insertionPoint(1,1) + size2(1,1) - 1), piece2.ImageBW);
-
-
-
-
-
-% figure;
-% imshow(comparisonSpace);
-% hold on;
-% plot(corr_r, corr_c, 'or', 'MarkerSize', 10);
-% plot(piece1Corner(1, 1), piece1Corner(1, 2), 'ob', 'MarkerSize', 10);
-% plot(insertionPoint(1, 1), insertionPoint(1, 2), 'ob', 'MarkerSize', 10);
 
 
 
@@ -103,6 +89,3 @@ shape_match_score = sum(sum(maskComparisonSpace));
 
 
 end
-
-
-

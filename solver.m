@@ -99,8 +99,9 @@ while length(unmatched_edges)>0
 			[shape_match_score, match_rotation] = compare_edge_shape( ...
 				edge_to_be_checked, unmatched_edges(unmatched_edge_index, :));
 			
-			unmatched_edges(unmatched_edge_index, :)
-			shape_match_score
+			
+% 			unmatched_edges(unmatched_edge_index, :)
+% 			shape_match_score
 			
 			
 			if shape_match_score < shape_match_score_threshold
@@ -140,10 +141,10 @@ while length(unmatched_edges)>0
 			
 			solution_matrix(position(1,1),position(1,2)) = unmatched_edges(best_unmatched_edge_index,1);
 			if(solution_matrix(position(1,1)+1,position(1,2)) == 0)
-				edges_in_queue(end+1,:) = [unmatched_edges(best_unmatched_edge_index,1),3]
+				edges_in_queue(end+1,:) = [unmatched_edges(best_unmatched_edge_index,1),3];
 			else
 				ind_to_delete = find(edges_in_queue(:, 1) == unmatched_edges(best_unmatched_edge_index,1) ...
-					& edges_in_queue(:, 2) == 1)
+					& edges_in_queue(:, 2) == 1);
 				edges_in_queue(ind_to_delete, :) = [];
 			end
 			
