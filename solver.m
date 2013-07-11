@@ -93,6 +93,8 @@ clc;clear;
 load('image_aquisitio_workspace.mat');
 shape_match_score_threshold = inf;
 color_match_score_threshold = inf;
+shape_match_threshold_backoff = 80;
+color_match_threshold_backoff = .2;
 
 while length(unmatched_edges)>0
 	'hey there'
@@ -121,7 +123,7 @@ while length(unmatched_edges)>0
 				
 				if color_match_score < color_match_score_threshold
 					% calculate overall score
-					unmatched_edge_score = 180*color_match_score + shape_match_score;
+					unmatched_edge_score = color_match_score + shape_match_score;
 					if unmatched_edge_score < best_unmatched_edge_score
 						best_unmatched_edge_score = unmatched_edge_score;
 						best_unmatched_edge_index = unmatched_edge_index;

@@ -1,7 +1,7 @@
 function [color_match_score] = compare_edge_color(edge_1, edge_2, rotation)
 % PARAMS
-comparison_depth = 14;
-num_points = 50;
+comparison_depth = 15;%length of side divided by this is depth inward
+num_points = 15;
 
 global pieces;
 
@@ -28,28 +28,29 @@ insertionPoint = piece1Corner - pair2b;
 comparisonSpace(insertionPoint(1,2):insertionPoint(1,2) + size2(1,2) - 1, insertionPoint(1,1):insertionPoint(1, 1) + size2(1,1) - 1) = ...
     comparisonSpace(insertionPoint(1,2):insertionPoint(1,2) + size2(1,2) - 1, insertionPoint(1,1):insertionPoint(1, 1) + size2(1,1) - 1) + piece2.Image;
 
-% close all;
-% figure;
-% imagesc(comparisonSpace);
-% hold on;
+close all;
+figure;
+imagesc(comparisonSpace);
+hold on;
 
 pairA = round(((pair1a + [corr_r, corr_c]) + (pair2a + insertionPoint))/2);
 pairB = ((pair1b + [corr_r, corr_c]) + (pair2b + insertionPoint))/2;
 pathVector = pairB - pairA;
 
-% test = (pair1a + [corr_r, corr_c]);
-% plot(test(1, 1), test(1, 2), 'or', 'MarkerSize', 10);
-% test = (pair2a + insertionPoint);
-% plot(test(1, 1), test(1, 2), 'or', 'MarkerSize', 10);
-% test = (pair1b + [corr_r, corr_c]);
-% plot(test(1, 1), test(1, 2), 'or', 'MarkerSize', 10);
-% test = (pair2b + insertionPoint);
-% plot(test(1, 1), test(1, 2), 'or', 'MarkerSize', 10);
 
+test = (pair1a + [corr_r, corr_c]);
+plot(test(1, 1), test(1, 2), 'or', 'MarkerSize', 10);
+test = (pair2a + insertionPoint);
+plot(test(1, 1), test(1, 2), 'or', 'MarkerSize', 10);
+test = (pair1b + [corr_r, corr_c]);
+plot(test(1, 1), test(1, 2), 'or', 'MarkerSize', 10);
+test = (pair2b + insertionPoint);
+plot(test(1, 1), test(1, 2), 'or', 'MarkerSize', 10);
+comparison_depth = sqrt(sum(pathVector.^2))/comparison_depth;
 
 
 inverse = [pathVector(1,2), pathVector(1,1)];
-offset = round(inverse * 4/sqrt(sum(inverse.^2)));
+offset = round(inverse * comparison_depth/sqrt(sum(inverse.^2)));
 
 color_match_score = 0;
 for i=0:num_points
@@ -60,8 +61,10 @@ for i=0:num_points
    aVal = comparisonSpace(a(1,1), a(1,2));
    bVal = comparisonSpace(b(1,1), b(1,2));
    color_match_score = color_match_score + (aVal - bVal)^2;
-%    plot(a(1, 1), a(1, 2), 'ob', 'MarkerSize', 10);
-%    plot(b(1, 1), b(1, 2), 'ob', 'MarkerSize', 10);
+   plot(a(1, 1), a(1, 2), 'ob', 'MarkerSize', 10);
+   plot(b(1, 1), b(1, 2), 'ob', 'MarkerSize', 10);
 end
+
+color_match_score = color_match_score / num_points;
 
 end
