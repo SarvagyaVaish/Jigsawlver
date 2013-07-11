@@ -1,6 +1,11 @@
 clc;
 %close all;
-sm = solution_matrix(17:20, 18:20);
+sm = solution_matrix;
+cols = find(sum(sm, 1) == 0);
+sm(:, cols) = [];
+rows = find(sum(sm, 2) == 0);
+sm(rows, :) = [];
+
 sm_size = size(sm);
 global pieces
 
