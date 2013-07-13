@@ -11,12 +11,12 @@ piece_image = piece.Image;
 
 wavelet_size = round(min(size(piece.Image)) * wavelet_size_param);
 score_map = ones(rows, cols)*power(wavelet_size, 2);
-summed_score_map = score_map;
+summed_score_mna
 
 % get binary
 piece_image_binary = piece.ImageBW;
 
-possible_corners = [];
+corners = [];
 for corner_type_cell = {'top_left', 'top_right', 'bottom_right', 'bottom_left'}
 	
 	corner_type = corner_type_cell{1};
@@ -67,7 +67,6 @@ for corner_type_cell = {'top_left', 'top_right', 'bottom_right', 'bottom_left'}
 	
 	% find local minimum errors
 	%imagesc(score_map);
-	summed_score_map = summed_score_map + score_map.^8;
 	
 	% find local areas of interest
 	top_percent = 0.10;
@@ -108,6 +107,5 @@ for corner_type_cell = {'top_left', 'top_right', 'bottom_right', 'bottom_left'}
 end
 
 piece.Corners = possible_corners;
-imagesc(summed_score_map)
 
 end

@@ -22,10 +22,9 @@ classdef puzzlePiece < handle
 		function show_image(p)
 			imshow(p.Image)
 			hold on
-			plot(p.Corners(1, 1), p.Corners(1, 2), 'or', 'MarkerSize', 10);
-			plot(p.Corners(2, 1), p.Corners(2, 2), 'or', 'MarkerSize', 10);
-			plot(p.Corners(3, 1), p.Corners(3, 2), 'or', 'MarkerSize', 10);
-			plot(p.Corners(4, 1), p.Corners(4, 2), 'or', 'MarkerSize', 10);
+			for i = 1:size(p.Corners, 1)
+				plot(p.Corners(i, 1), p.Corners(i, 2), 'or', 'MarkerSize', 10);
+			end
 		end
 		
 		%       function insertBefore(newNode, nodeAfter)
