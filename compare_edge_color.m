@@ -50,18 +50,21 @@ pathVector = pairB - pairA;
 
 inverse = [pathVector(1,2), pathVector(1,1)];
 offset = round(inverse * 4/sqrt(sum(inverse.^2)));
-
 color_match_score = 0;
+
+% imagesc(comparisonSpace);
+% hold on;
+
 for i=0:num_points
    spot = pairA + round(pathVector*i/num_points);
    a = spot + offset;
    b = spot - offset;
    
-   aVal = comparisonSpace(a(1,1), a(1,2));
-   bVal = comparisonSpace(b(1,1), b(1,2));
+   aVal = comparisonSpace(a(1,2), a(1,1));
+   bVal = comparisonSpace(b(1,2), b(1,1));
    color_match_score = color_match_score + (aVal - bVal)^2;
-%    plot(a(1, 1), a(1, 2), 'ob', 'MarkerSize', 10);
-%    plot(b(1, 1), b(1, 2), 'ob', 'MarkerSize', 10);
+%    plot(a(1, 1), a(1, 2), 'or');
+%    plot(b(1, 1), b(1, 2), 'or');
 end
 
 end
