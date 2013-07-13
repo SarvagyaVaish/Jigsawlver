@@ -2,22 +2,19 @@ function piece = find_corner(piece)
 warning('off');
 
 % params
-wavelet_size_param = 1/30;
-
+wavelet_size_param = 1/40;
 
 % get piece
 piece_image = piece.Image;
 [rows, cols] = size(piece_image);
 
-wavelet_size = round(min(size(piece.Image)) * wavelet_size_param);
-score_map = ones(rows, cols)*power(wavelet_size, 2);
-summed_score_map = score_map;
+wavelet_size = 2*round(min(size(piece.Image)) * wavelet_size_param);
 
 % get binary
 piece_image_binary = piece.ImageBW;
 
 possible_corners = [];
-for corner_type_cell = {'top_left', 'top_right', 'bottom_right', 'bottom_left'}
+for corner_type_cell = {'bottom_right', 'top_right', 'top_left', 'bottom_left'}
 	
 	corner_type = corner_type_cell{1};
 	% form wavelet
@@ -26,19 +23,15 @@ for corner_type_cell = {'top_left', 'top_right', 'bottom_right', 'bottom_left'}
 		case 'top_left'
 			wavelet(1:wavelet_size/2, :) = false;
 			wavelet(:, 1:wavelet_size/2) = false;
-			image_corner = [1, 1];
 		case 'top_right'
 			wavelet(1:wavelet_size/2, :) = false;
 			wavelet(:, wavelet_size/2+1:end) = false;
-			image_corner = [cols, 1];
 		case 'bottom_left'
 			wavelet(wavelet_size/2+1:end, :) = false;
 			wavelet(:, 1:wavelet_size/2) = false;
-			image_corner = [1, rows];
 		case 'bottom_right'
 			wavelet(wavelet_size/2+1:end, :) = false;
 			wavelet(:, wavelet_size/2+1:end) = false;
-			image_corner = [cols, rows];
 	end
 	
 	% find wavelet in piece_image
@@ -52,62 +45,46 @@ for corner_type_cell = {'top_left', 'top_right', 'bottom_right', 'bottom_left'}
 			
 			error = sum(sum(dist_mat));
 			score_map(x+wavelet_size/2, y+wavelet_size/2) = error;
-			
-			% visualize with time delay
-% 			        [x, y, error]
-% 			        subplot(1, 3, 1);
-% 			        imshow(mat2gray(piece_image_section, [min(min(piece_image_section)), max(max(piece_image_section))]));
-% 			        subplot(1, 3, 2);
-% 			        imshow(mat2gray(wavelet, [min(min(wavelet)), max(max(wavelet))]));
-% 			        subplot(1, 3, 3);
-% 			        imshow(mat2gray(dist_mat, [min(min(dist_mat)), max(max(dist_mat))]));
-% 			        pause(0.1);
 		end
 	end
 	
 	% find local minimum errors
 	%imagesc(score_map);
-	summed_score_map = summed_score_map + score_map.^8;
+	%summed_score_map = summed_score_map + score_map.^8;
 	
 	% find local areas of interest
-	top_percent = 0.10;
-	error_thresh = (max(max(score_map))-min(min(score_map)))*top_percent;
+	top_percent = 0.80;
+	score_map = score_map(wavelet_size:end-wavelet_size*2, wavelet_size:end-wavelet_size*2);
 	local_best_areas = score_map;
-	local_best_areas(local_best_areas <= error_thresh) = true;
-	local_best_areas(local_best_areas > error_thresh) = false;
-	local_best_areas = boolean(local_best_areas);
+	
+	%hist(reshape(score_map, 1, size(score_map, 1)*size(score_map, 2)));
+	
+	%error_thresh = max(max(score_map)) - (max(max(score_map)) - min(min(score_map))) * top_percent;
+	error_thresh = wavelet_size^2-top_percent*wavelet_size^2;
+	%local_best_areas = score_map;
+	true_ind = find(local_best_areas <= error_thresh);
+	false_ind = find(local_best_areas > error_thresh);
+	local_best_areas(true_ind) = true;
+	local_best_areas(false_ind) = false;
 	local_best_areas = imfill(local_best_areas, 'holes');
 	
 	% blob detection
+	[r, c] = size(local_best_areas);
 	local_best_areas = bwlabel(local_best_areas, 8);
 	for area = 1:max(unique(local_best_areas))
 		indices = find(local_best_areas == area);
 		[a, corner_index] = min(score_map(indices));
 		corner_index = indices(corner_index);
-		corner_col = mod(corner_index, rows);
-		corner_row = double(int64(corner_index./rows));
+		corner_col = mod(corner_index, r);
+		corner_row = double(int64(corner_index./r));
 		possible_corners(end+1, :) = [corner_row, corner_col];
 	end
 	
-	%possible_corners
+	possible_corners
 	
-% 	% select corner closest to image corner
-% 	min_dist = pdist([possible_corners(1, :); image_corner]);
-% 	corner_index = 1;
-% 	for corner = 2:size(possible_corners, 1)
-% 		curr_dist = pdist([possible_corners(corner, :); image_corner]);
-% 		if curr_dist < min_dist
-% 			min_dist = curr_dist;
-% 			corner_index = corner;
-% 		end
-% 	end
-% 	
-% 	corner_location = possible_corners(corner_index, :);
-% 	
-% 	corners(end+1, :) = corner_location;
 end
 
+possible_corners = possible_corners + wavelet_size;
 piece.Corners = possible_corners;
-imagesc(summed_score_map)
 
 end
