@@ -1,7 +1,7 @@
 function [shape_match_score, match_rotation] = compare_edge_shape(edge_1, edge_2)
 % PARAMS
 edge_length_threshold = .05;
-fit_mask_width = 60;
+fit_mask_width = 2.5;%length edge divided by this gives the width
 
 
 global pieces;
@@ -34,6 +34,7 @@ pair2a = piece2.Corners(edge_2(1, 2), :);
 
 dist1 = sqrt(sum(pair1.^2));
 dist2 = sqrt(sum(pair2.^2));
+fit_mask_width = max(dist1,dist2)/fit_mask_width;
 
 if abs(dist1-dist2)>(edge_length_threshold*max(dist1,dist2))
 	shape_match_score = inf;
@@ -61,7 +62,7 @@ comparisonSpace(insertionPoint(1,2):insertionPoint(1,2) + size2(1,2) - 1, insert
 
 
 
-mask = ones(fit_mask_width, round(max(dist1,dist2)))';
+mask = ones(round(fit_mask_width), round(max(dist1,dist2)))';
 mask = boolean(bufferImage(mask));
 
 mask_piece = puzzlePiece(mask);
@@ -84,7 +85,7 @@ maskComparisonSpace( ...
 
 maskComparisonSpace = and(maskComparisonSpace, not(comparisonSpace));
 
-shape_match_score = sum(sum(maskComparisonSpace));
+shape_match_score = sum(sum(maskComparisonSpace))/(fit_mask_width * round(max(dist1,dist2)));
 
 
 
