@@ -1,0 +1,5 @@
+function area = areaInPoints(corners)
+
+area = abs([]/2);
+
+end

@@ -55,7 +55,7 @@ for corner_type_cell = {'bottom_right', 'top_right', 'top_left', 'bottom_left'}
 	
 	% find local areas of interest
 	
-	score_map = score_map(wavelet_size/2+1:end-wavelet_size/2, wavelet_size/2+1:end-wavelet_size/2);
+	score_map = score_map(wavelet_size:end-wavelet_size*2, wavelet_size:end-wavelet_size*2);
 	local_best_areas = score_map;
 	
 	%hist(reshape(score_map, 1, size(score_map, 1)*size(score_map, 2)));
@@ -85,13 +85,10 @@ for corner_type_cell = {'bottom_right', 'top_right', 'top_left', 'bottom_left'}
 	
 end
 
-possible_corners = possible_corners + wavelet_size/2;
+possible_corners = possible_corners + wavelet_size;
 
 improved = true;
-if length(possible_corners)<4
-    piece.show_image
-    possible_corners
-end
+if(length(possible_corners
 bestCorners = possible_corners(1:4, :);
 bestArea = areaInPoints(bestCorners);
 while improved == true

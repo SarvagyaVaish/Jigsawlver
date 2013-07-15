@@ -1,67 +1,67 @@
 clc;clear;
 
-% PARAMS
-shape_match_score_threshold = inf;
-color_match_score_threshold = inf;
-shape_match_threshold_backoff = 80;
-color_match_threshold_backoff = .2;
-
-% Step 1: Blob detection
-%   input: one giant image 3D
-%   output: list of grayscale puzzle pieces
-
-global pieces;
-pieces = {};
-path = 'puzzles/sky2/piece_';
-file_extension = '.PNG';
-for i = 1:9
-	% obtain the image of the piece
-	filename = [path, num2str(i), file_extension];
-	
-	% read original image
-	rgb_image = imread(filename);
-	rgb_image(rgb_image == 0) = 1;
-	
-	% add buffer to deal with rotations and such
-	rgb_image = bufferImage(rgb_image);
-	rgb_image = im2double(rgb_image);
-	
-	% convert to gray scale
-	gray_image_temp = im2double(rgb2gray(rgb_image));
-	
-	% convert added margin into pure white
-	gray_image_temp(gray_image_temp == 0) = 1;
-	
-	% create binary image
-	bw_image = boolean(im2bw(gray_image_temp, graythresh(gray_image_temp)));
-	bw_image = imfill(~bw_image, 'holes');
-	
-	gray_image = zeros(size(gray_image_temp, 1), size(gray_image_temp, 2));
-	gray_image(bw_image) = gray_image_temp(bw_image);
-	
-	
-	% store all necessary images in puzzlePiece object
-	new_piece = puzzlePiece(gray_image);
-	new_piece.ImageRGB = rgb_image;
-	new_piece.ImageBW = bw_image;
-	
-	% find corners
-	new_piece = find_corner(new_piece);
-	
-	% add piece to pieces cell array
-	pieces{end+1} = new_piece;
-	
-end
-save('pieces.mat', 'pieces')
-
-load('pieces.mat')
-'done with digitizing pieces'
-
-% Step 3: Graph search
-%   input: all puzzle pieces
-%   output: the solution
-
-
+% % PARAMS
+% shape_match_score_threshold = inf;
+% color_match_score_threshold = inf;
+% shape_match_threshold_backoff = 80;
+% color_match_threshold_backoff = .2;
+% 
+% % Step 1: Blob detection
+% %   input: one giant image 3D
+% %   output: list of grayscale puzzle pieces
+% 
+ global pieces;
+% pieces = {};
+% path = 'puzzles/sky2/piece_';
+% file_extension = '.PNG';
+% for i = 1:9
+% 	% obtain the image of the piece
+% 	filename = [path, num2str(i), file_extension];
+% 	
+% 	% read original image
+% 	rgb_image = imread(filename);
+% 	rgb_image(rgb_image == 0) = 1;
+% 	
+% 	% add buffer to deal with rotations and such
+% 	rgb_image = bufferImage(rgb_image);
+% 	rgb_image = im2double(rgb_image);
+% 	
+% 	% convert to gray scale
+% 	gray_image_temp = im2double(rgb2gray(rgb_image));
+% 	
+% 	% convert added margin into pure white
+% 	gray_image_temp(gray_image_temp == 0) = 1;
+% 	
+% 	% create binary image
+% 	bw_image = boolean(im2bw(gray_image_temp, graythresh(gray_image_temp)));
+% 	bw_image = imfill(~bw_image, 'holes');
+% 	
+% 	gray_image = zeros(size(gray_image_temp, 1), size(gray_image_temp, 2));
+% 	gray_image(bw_image) = gray_image_temp(bw_image);
+% 	
+% 	
+% 	% store all necessary images in puzzlePiece object
+% 	new_piece = puzzlePiece(gray_image);
+% 	new_piece.ImageRGB = rgb_image;
+% 	new_piece.ImageBW = bw_image;
+% 	
+% 	% find corners
+% 	new_piece = find_corner(new_piece);
+% 	
+% 	% add piece to pieces cell array
+% 	pieces{end+1} = new_piece;
+% 	
+% end
+% % save('pieces.mat', 'pieces')
+% % 
+% % load('pieces.mat')
+% 'done with digitizing pieces'
+% 
+% % Step 3: Graph search
+% %   input: all puzzle pieces
+% %   output: the solution
+% 
+% 
 % relative position matrix
 solution_matrix = zeros(4*length(pieces));
 pieces{1}.PositionInSolution = [floor(length(solution_matrix)/2), floor(length(solution_matrix)/2)];
@@ -88,7 +88,7 @@ end
 % after lowering the threshold
 edges_with_no_match = [];
 
-save('image_aquisitio_workspace.mat')
+%save('image_aquisitio_workspace.mat')
 
 load('image_aquisitio_workspace.mat');
 shape_match_score_threshold = inf;
