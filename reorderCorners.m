@@ -9,6 +9,10 @@ function ordered = reorderCorners(unordered)
        if pair1(1,2)<0
            angle1 = angle1 + 180;
        end
+       angle1 = angle1 + 180;
+       if angle1 > 360
+          angle1 = angle1 - 360; 
+       end
        angle1 = 360 - angle1;
        
        angles(i) = angle1;

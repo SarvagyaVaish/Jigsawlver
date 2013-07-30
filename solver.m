@@ -60,9 +60,9 @@ clc;clear;
 % % Step 3: Graph search
 % %   input: all puzzle pieces
 % %   output: the solution
-% 
-% 
-% relative position matrix
+
+
+%relative position matrix
 solution_matrix = zeros(4*length(pieces));
 pieces{1}.PositionInSolution = [floor(length(solution_matrix)/2), floor(length(solution_matrix)/2)];
 solution_matrix(floor(length(solution_matrix)/2), floor(length(solution_matrix)/2)) = 1;

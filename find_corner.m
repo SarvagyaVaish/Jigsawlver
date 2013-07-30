@@ -2,8 +2,8 @@ function piece = find_corner(piece)
 warning('off');
 
 % params
-wavelet_size_param = 1/40;
-top_percent = 0.90;
+wavelet_size_param = 1/15;
+top_percent = 0.95;
 
 % get piece
 piece_image = piece.Image;
@@ -87,29 +87,41 @@ end
 
 possible_corners = possible_corners + wavelet_size/2;
 
-improved = true;
-if length(possible_corners)<4
+numCorn = length(possible_corners);
+if numCorn<4
     piece.show_image
     possible_corners
 end
 bestCorners = possible_corners(1:4, :);
-bestArea = areaInPoints(bestCorners);
-while improved == true
-    improved = false;
-    for spot=1:4
-        for i=1:length(possible_corners)
-            checkCorners = bestCorners;
-            checkCorners(spot, :) = possible_corners(i, :);
-            checkCorners = reorderCorners(checkCorners);
-            checkArea = areaInPoints(checkCorners);
-            
-            if checkArea>bestArea
-               bestArea = checkArea;
-               bestCorners = checkCorners;
-               improved = true;
-            end
+bestArea = 0;
+for h=1:numCorn
+    for i=1:numCorn
+        if i == h
+            continue;
         end
-    end
+        for j=1:numCorn
+           if j == h || j == i
+               continue;
+           end
+           for k=1:numCorn
+               if k == h || k == i || k == j
+                   continue;
+               end
+                  checkCorners = [possible_corners(h,:);possible_corners(i,:);possible_corners(j,:);possible_corners(k,:)];
+
+                binSize = size(piece_image_binary);
+                shape = poly2mask(checkCorners(:,1)',checkCorners(:,2)',binSize(1,1), binSize(1,2));
+                overlap = not(xor(shape, piece_image_binary));
+
+                checkArea = sum(sum(overlap));
+
+                if checkArea>bestArea
+                   bestArea = checkArea;
+                   bestCorners = checkCorners;
+                end
+           end
+        end
+    end    
 end
 
 piece.Corners = bestCorners;
