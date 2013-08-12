@@ -16,7 +16,7 @@ clc;clear;
 % file_extension = '.PNG';
 % for i = 1:9
 % 	% obtain the image of the piece
-% 	filename = [path, num2str(i), file_extension];
+% 	filename = [path, num2str(i), file_extension]
 % 	
 % 	% read original image
 % 	rgb_image = imread(filename);
@@ -52,17 +52,17 @@ clc;clear;
 % 	pieces{end+1} = new_piece;
 % 	
 % end
-% % save('pieces.mat', 'pieces')
-% % 
-% % load('pieces.mat')
-% 'done with digitizing pieces'
-% 
-% % Step 3: Graph search
-% %   input: all puzzle pieces
-% %   output: the solution
+% save('pieces.mat', 'pieces')
+
+load('pieces.mat')
+'done with digitizing pieces'
+
+% Step 3: Graph search
+%   input: all puzzle pieces
+%   output: the solution
 
 
-%relative position matrix
+% relative position matrix
 solution_matrix = zeros(4*length(pieces));
 pieces{1}.PositionInSolution = [floor(length(solution_matrix)/2), floor(length(solution_matrix)/2)];
 solution_matrix(floor(length(solution_matrix)/2), floor(length(solution_matrix)/2)) = 1;
