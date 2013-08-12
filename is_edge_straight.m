@@ -13,7 +13,7 @@ piece_size = size(piece.ImageBW);
 
 pair = corner1 - corner2;
 angle = atand(pair(1,1)/pair(1,2));
-if pair(1,2)<0
+if pair(1,2) < 0
 	angle = angle + 180;
 end
 
@@ -39,7 +39,7 @@ comparisonSpace(insertionPoint(1, 2):insertionPoint(1, 2) + piece_size(1, 2) - 1
 
 % create a mask comparison space and slap the mask on it
 maskComparisonSpace = zeros(piece_size(1, 1)+ 2*mask_size(1, 1) + 5, piece_size(1, 2)+ 2*mask_size(1, 2) + 5);
-insertionPoint = mask_size + corner2 + 1 - mask_corner;
+insertionPoint = mask_size + corner1 + 1 - mask_corner;
 maskComparisonSpace(insertionPoint(1, 2):insertionPoint(1, 2) + mask_size(1, 2) - 1, ...
 	insertionPoint(1, 1):insertionPoint(1, 1) + mask_size(1, 1) - 1) = mask_piece.ImageBW;
 
@@ -56,7 +56,7 @@ mask_piece.ImageRGB = mask;
 mask_piece = find_corner(mask_piece);
 mask_size = size(mask_piece.ImageBW);
 mask_piece = rotatePiece(mask_piece, angle);
-mask_corner = mask_piece.Corners(2, :);
+mask_corner = mask_piece.Corners(3, :);
 
 
 % create a comparison space and slap the piece in it
