@@ -1,7 +1,7 @@
 function [output_image] = bufferImage(input_image)
 
 [r, c, w] = size(input_image);
-diag = ceil(sqrt(r*r + c*c)) + 10;
+diag = ceil(sqrt(r*r + c*c)) + 30;
 output_image = uint8(zeros(diag, diag, w));
 
 loc = ceil([(diag - r)/2, (diag - c)/2]);
